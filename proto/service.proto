@@ -17,16 +17,14 @@ import "permission.proto";
 
 service Service {
 
-  rpc CreateOrUpdateGuildProgress (CreateOrUpdateGuildProgressRequest) returns (CreateOrUpdateGuildProgressResponse) {
-    option (permission.action) = CREATE;
-    option (permission.resource) = "ADMIN:NAMESPACE:{namespace}:CLOUDSAVE:RECORD";
+  rpc Join (JoinRequest) returns (JoinResponse) {
     option (google.api.http) = {
-      post: "/v1/admin/namespace/{namespace}/progress"
+      post: "/v1/admin/namespace/{namespace}/join"
       body: "*"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Update Guild progression"
-      description: "Update Guild progression if not existed yet will create a new one"
+      summary: "Join"
+      description: "Join"
       security: {
         security_requirement: {
           key: "Bearer"
@@ -36,15 +34,13 @@ service Service {
     };
   }
 
-  rpc GetGuildProgress (GetGuildProgressRequest) returns (GetGuildProgressResponse) {
-    option (permission.action) = READ;
-    option (permission.resource) = "ADMIN:NAMESPACE:{namespace}:CLOUDSAVE:RECORD";
+  rpc Check(CheckRequest) returns (CheckResponse) {
     option (google.api.http) = {
-      get: "/v1/admin/namespace/{namespace}/progress/{guild_id}"
+      get: "/v1/admin/namespace/{namespace}/check/{player_id}"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Get guild progression"
-      description: "Get guild progression"
+      summary: "Check"
+      description: "Check"
       security: {
         security_requirement: {
           key: "Bearer"
@@ -55,28 +51,21 @@ service Service {
   }
 }
 
-message CreateOrUpdateGuildProgressRequest {
+message JoinRequest {
   string namespace = 1;
-  GuildProgress guild_progress = 2;
+  string player_id = 2;
 }
 
-message CreateOrUpdateGuildProgressResponse {
-  GuildProgress guild_progress = 1;
+message JoinResponse {
 }
 
-message GetGuildProgressRequest {
+message CheckRequest {
   string namespace = 1;
-  string guild_id = 2;
+  string player_id = 2;
 }
 
-message GetGuildProgressResponse {
-  GuildProgress guild_progress = 1;
-}
-
-message GuildProgress {
-  string guild_id = 1;
-  string namespace = 2;
-  map<string, int32> objectives = 3;
+message CheckResponse {
+  string status = 1;
 }
 
 // OpenAPI options for the entire API.

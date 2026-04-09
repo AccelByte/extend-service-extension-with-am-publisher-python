@@ -27,28 +27,28 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type CreateOrUpdateGuildProgressRequest struct {
+type JoinRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Namespace     string                 `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
-	GuildProgress *GuildProgress         `protobuf:"bytes,2,opt,name=guild_progress,json=guildProgress,proto3" json:"guild_progress,omitempty"`
+	PlayerId      string                 `protobuf:"bytes,2,opt,name=player_id,json=playerId,proto3" json:"player_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *CreateOrUpdateGuildProgressRequest) Reset() {
-	*x = CreateOrUpdateGuildProgressRequest{}
+func (x *JoinRequest) Reset() {
+	*x = JoinRequest{}
 	mi := &file_service_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CreateOrUpdateGuildProgressRequest) String() string {
+func (x *JoinRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateOrUpdateGuildProgressRequest) ProtoMessage() {}
+func (*JoinRequest) ProtoMessage() {}
 
-func (x *CreateOrUpdateGuildProgressRequest) ProtoReflect() protoreflect.Message {
+func (x *JoinRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_service_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -60,46 +60,45 @@ func (x *CreateOrUpdateGuildProgressRequest) ProtoReflect() protoreflect.Message
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateOrUpdateGuildProgressRequest.ProtoReflect.Descriptor instead.
-func (*CreateOrUpdateGuildProgressRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use JoinRequest.ProtoReflect.Descriptor instead.
+func (*JoinRequest) Descriptor() ([]byte, []int) {
 	return file_service_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *CreateOrUpdateGuildProgressRequest) GetNamespace() string {
+func (x *JoinRequest) GetNamespace() string {
 	if x != nil {
 		return x.Namespace
 	}
 	return ""
 }
 
-func (x *CreateOrUpdateGuildProgressRequest) GetGuildProgress() *GuildProgress {
+func (x *JoinRequest) GetPlayerId() string {
 	if x != nil {
-		return x.GuildProgress
+		return x.PlayerId
 	}
-	return nil
+	return ""
 }
 
-type CreateOrUpdateGuildProgressResponse struct {
+type JoinResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GuildProgress *GuildProgress         `protobuf:"bytes,1,opt,name=guild_progress,json=guildProgress,proto3" json:"guild_progress,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *CreateOrUpdateGuildProgressResponse) Reset() {
-	*x = CreateOrUpdateGuildProgressResponse{}
+func (x *JoinResponse) Reset() {
+	*x = JoinResponse{}
 	mi := &file_service_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CreateOrUpdateGuildProgressResponse) String() string {
+func (x *JoinResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateOrUpdateGuildProgressResponse) ProtoMessage() {}
+func (*JoinResponse) ProtoMessage() {}
 
-func (x *CreateOrUpdateGuildProgressResponse) ProtoReflect() protoreflect.Message {
+func (x *JoinResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_service_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -111,40 +110,33 @@ func (x *CreateOrUpdateGuildProgressResponse) ProtoReflect() protoreflect.Messag
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateOrUpdateGuildProgressResponse.ProtoReflect.Descriptor instead.
-func (*CreateOrUpdateGuildProgressResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use JoinResponse.ProtoReflect.Descriptor instead.
+func (*JoinResponse) Descriptor() ([]byte, []int) {
 	return file_service_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *CreateOrUpdateGuildProgressResponse) GetGuildProgress() *GuildProgress {
-	if x != nil {
-		return x.GuildProgress
-	}
-	return nil
-}
-
-type GetGuildProgressRequest struct {
+type CheckRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Namespace     string                 `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
-	GuildId       string                 `protobuf:"bytes,2,opt,name=guild_id,json=guildId,proto3" json:"guild_id,omitempty"`
+	PlayerId      string                 `protobuf:"bytes,2,opt,name=player_id,json=playerId,proto3" json:"player_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetGuildProgressRequest) Reset() {
-	*x = GetGuildProgressRequest{}
+func (x *CheckRequest) Reset() {
+	*x = CheckRequest{}
 	mi := &file_service_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetGuildProgressRequest) String() string {
+func (x *CheckRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetGuildProgressRequest) ProtoMessage() {}
+func (*CheckRequest) ProtoMessage() {}
 
-func (x *GetGuildProgressRequest) ProtoReflect() protoreflect.Message {
+func (x *CheckRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_service_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -156,46 +148,46 @@ func (x *GetGuildProgressRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetGuildProgressRequest.ProtoReflect.Descriptor instead.
-func (*GetGuildProgressRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use CheckRequest.ProtoReflect.Descriptor instead.
+func (*CheckRequest) Descriptor() ([]byte, []int) {
 	return file_service_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *GetGuildProgressRequest) GetNamespace() string {
+func (x *CheckRequest) GetNamespace() string {
 	if x != nil {
 		return x.Namespace
 	}
 	return ""
 }
 
-func (x *GetGuildProgressRequest) GetGuildId() string {
+func (x *CheckRequest) GetPlayerId() string {
 	if x != nil {
-		return x.GuildId
+		return x.PlayerId
 	}
 	return ""
 }
 
-type GetGuildProgressResponse struct {
+type CheckResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GuildProgress *GuildProgress         `protobuf:"bytes,1,opt,name=guild_progress,json=guildProgress,proto3" json:"guild_progress,omitempty"`
+	Status        string                 `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetGuildProgressResponse) Reset() {
-	*x = GetGuildProgressResponse{}
+func (x *CheckResponse) Reset() {
+	*x = CheckResponse{}
 	mi := &file_service_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetGuildProgressResponse) String() string {
+func (x *CheckResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetGuildProgressResponse) ProtoMessage() {}
+func (*CheckResponse) ProtoMessage() {}
 
-func (x *GetGuildProgressResponse) ProtoReflect() protoreflect.Message {
+func (x *CheckResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_service_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -207,111 +199,41 @@ func (x *GetGuildProgressResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetGuildProgressResponse.ProtoReflect.Descriptor instead.
-func (*GetGuildProgressResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use CheckResponse.ProtoReflect.Descriptor instead.
+func (*CheckResponse) Descriptor() ([]byte, []int) {
 	return file_service_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GetGuildProgressResponse) GetGuildProgress() *GuildProgress {
+func (x *CheckResponse) GetStatus() string {
 	if x != nil {
-		return x.GuildProgress
-	}
-	return nil
-}
-
-type GuildProgress struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	GuildId       string                 `protobuf:"bytes,1,opt,name=guild_id,json=guildId,proto3" json:"guild_id,omitempty"`
-	Namespace     string                 `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
-	Objectives    map[string]int32       `protobuf:"bytes,3,rep,name=objectives,proto3" json:"objectives,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *GuildProgress) Reset() {
-	*x = GuildProgress{}
-	mi := &file_service_proto_msgTypes[4]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *GuildProgress) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GuildProgress) ProtoMessage() {}
-
-func (x *GuildProgress) ProtoReflect() protoreflect.Message {
-	mi := &file_service_proto_msgTypes[4]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GuildProgress.ProtoReflect.Descriptor instead.
-func (*GuildProgress) Descriptor() ([]byte, []int) {
-	return file_service_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *GuildProgress) GetGuildId() string {
-	if x != nil {
-		return x.GuildId
+		return x.Status
 	}
 	return ""
-}
-
-func (x *GuildProgress) GetNamespace() string {
-	if x != nil {
-		return x.Namespace
-	}
-	return ""
-}
-
-func (x *GuildProgress) GetObjectives() map[string]int32 {
-	if x != nil {
-		return x.Objectives
-	}
-	return nil
 }
 
 var File_service_proto protoreflect.FileDescriptor
 
 const file_service_proto_rawDesc = "" +
 	"\n" +
-	"\rservice.proto\x12\aservice\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto\x1a\x10permission.proto\"\x81\x01\n" +
-	"\"CreateOrUpdateGuildProgressRequest\x12\x1c\n" +
-	"\tnamespace\x18\x01 \x01(\tR\tnamespace\x12=\n" +
-	"\x0eguild_progress\x18\x02 \x01(\v2\x16.service.GuildProgressR\rguildProgress\"d\n" +
-	"#CreateOrUpdateGuildProgressResponse\x12=\n" +
-	"\x0eguild_progress\x18\x01 \x01(\v2\x16.service.GuildProgressR\rguildProgress\"R\n" +
-	"\x17GetGuildProgressRequest\x12\x1c\n" +
-	"\tnamespace\x18\x01 \x01(\tR\tnamespace\x12\x19\n" +
-	"\bguild_id\x18\x02 \x01(\tR\aguildId\"Y\n" +
-	"\x18GetGuildProgressResponse\x12=\n" +
-	"\x0eguild_progress\x18\x01 \x01(\v2\x16.service.GuildProgressR\rguildProgress\"\xcf\x01\n" +
-	"\rGuildProgress\x12\x19\n" +
-	"\bguild_id\x18\x01 \x01(\tR\aguildId\x12\x1c\n" +
-	"\tnamespace\x18\x02 \x01(\tR\tnamespace\x12F\n" +
-	"\n" +
-	"objectives\x18\x03 \x03(\v2&.service.GuildProgress.ObjectivesEntryR\n" +
-	"objectives\x1a=\n" +
-	"\x0fObjectivesEntry\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\x05R\x05value:\x028\x012\xe7\x04\n" +
-	"\aService\x12\xd0\x02\n" +
-	"\x1bCreateOrUpdateGuildProgress\x12+.service.CreateOrUpdateGuildProgressRequest\x1a,.service.CreateOrUpdateGuildProgressResponse\"\xd5\x01\x92Ak\x12\x18Update Guild progression\x1aAUpdate Guild progression if not existed yet will create a new oneb\f\n" +
+	"\rservice.proto\x12\aservice\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto\x1a\x10permission.proto\"H\n" +
+	"\vJoinRequest\x12\x1c\n" +
+	"\tnamespace\x18\x01 \x01(\tR\tnamespace\x12\x1b\n" +
+	"\tplayer_id\x18\x02 \x01(\tR\bplayerId\"\x0e\n" +
+	"\fJoinResponse\"I\n" +
+	"\fCheckRequest\x12\x1c\n" +
+	"\tnamespace\x18\x01 \x01(\tR\tnamespace\x12\x1b\n" +
+	"\tplayer_id\x18\x02 \x01(\tR\bplayerId\"'\n" +
+	"\rCheckResponse\x12\x16\n" +
+	"\x06status\x18\x01 \x01(\tR\x06status2\xa0\x02\n" +
+	"\aService\x12\x81\x01\n" +
+	"\x04Join\x12\x14.service.JoinRequest\x1a\x15.service.JoinResponse\"L\x92A\x1a\x12\x04Join\x1a\x04Joinb\f\n" +
 	"\n" +
 	"\n" +
-	"\x06Bearer\x12\x00\x8a\xb5\x18,ADMIN:NAMESPACE:{namespace}:CLOUDSAVE:RECORD\x90\xb5\x18\x01\x82\xd3\xe4\x93\x02-:\x01*\"(/v1/admin/namespace/{namespace}/progress\x12\x88\x02\n" +
-	"\x10GetGuildProgress\x12 .service.GetGuildProgressRequest\x1a!.service.GetGuildProgressResponse\"\xae\x01\x92A<\x12\x15Get guild progression\x1a\x15Get guild progressionb\f\n" +
+	"\x06Bearer\x12\x00\x82\xd3\xe4\x93\x02):\x01*\"$/v1/admin/namespace/{namespace}/join\x12\x90\x01\n" +
+	"\x05Check\x12\x15.service.CheckRequest\x1a\x16.service.CheckResponse\"X\x92A\x1c\x12\x05Check\x1a\x05Checkb\f\n" +
 	"\n" +
 	"\n" +
-	"\x06Bearer\x12\x00\x8a\xb5\x18,ADMIN:NAMESPACE:{namespace}:CLOUDSAVE:RECORD\x90\xb5\x18\x02\x82\xd3\xe4\x93\x025\x123/v1/admin/namespace/{namespace}/progress/{guild_id}B\xb6\x01\x92A?\x12\x12\n" +
+	"\x06Bearer\x12\x00\x82\xd3\xe4\x93\x023\x121/v1/admin/namespace/{namespace}/check/{player_id}B\xb6\x01\x92A?\x12\x12\n" +
 	"\vService API2\x031.0\"\b/serviceZ\x1f\n" +
 	"\x1d\n" +
 	"\x06Bearer\x12\x13\b\x02\x1a\rAuthorization \x02\n" +
@@ -329,29 +251,23 @@ func file_service_proto_rawDescGZIP() []byte {
 	return file_service_proto_rawDescData
 }
 
-var file_service_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_service_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_service_proto_goTypes = []any{
-	(*CreateOrUpdateGuildProgressRequest)(nil),  // 0: service.CreateOrUpdateGuildProgressRequest
-	(*CreateOrUpdateGuildProgressResponse)(nil), // 1: service.CreateOrUpdateGuildProgressResponse
-	(*GetGuildProgressRequest)(nil),             // 2: service.GetGuildProgressRequest
-	(*GetGuildProgressResponse)(nil),            // 3: service.GetGuildProgressResponse
-	(*GuildProgress)(nil),                       // 4: service.GuildProgress
-	nil,                                         // 5: service.GuildProgress.ObjectivesEntry
+	(*JoinRequest)(nil),   // 0: service.JoinRequest
+	(*JoinResponse)(nil),  // 1: service.JoinResponse
+	(*CheckRequest)(nil),  // 2: service.CheckRequest
+	(*CheckResponse)(nil), // 3: service.CheckResponse
 }
 var file_service_proto_depIdxs = []int32{
-	4, // 0: service.CreateOrUpdateGuildProgressRequest.guild_progress:type_name -> service.GuildProgress
-	4, // 1: service.CreateOrUpdateGuildProgressResponse.guild_progress:type_name -> service.GuildProgress
-	4, // 2: service.GetGuildProgressResponse.guild_progress:type_name -> service.GuildProgress
-	5, // 3: service.GuildProgress.objectives:type_name -> service.GuildProgress.ObjectivesEntry
-	0, // 4: service.Service.CreateOrUpdateGuildProgress:input_type -> service.CreateOrUpdateGuildProgressRequest
-	2, // 5: service.Service.GetGuildProgress:input_type -> service.GetGuildProgressRequest
-	1, // 6: service.Service.CreateOrUpdateGuildProgress:output_type -> service.CreateOrUpdateGuildProgressResponse
-	3, // 7: service.Service.GetGuildProgress:output_type -> service.GetGuildProgressResponse
-	6, // [6:8] is the sub-list for method output_type
-	4, // [4:6] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	0, // 0: service.Service.Join:input_type -> service.JoinRequest
+	2, // 1: service.Service.Check:input_type -> service.CheckRequest
+	1, // 2: service.Service.Join:output_type -> service.JoinResponse
+	3, // 3: service.Service.Check:output_type -> service.CheckResponse
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
+	0, // [0:0] is the sub-list for extension type_name
+	0, // [0:0] is the sub-list for extension extendee
+	0, // [0:0] is the sub-list for field type_name
 }
 
 func init() { file_service_proto_init() }
@@ -366,7 +282,7 @@ func file_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_service_proto_rawDesc), len(file_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

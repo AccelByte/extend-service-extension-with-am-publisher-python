@@ -34,28 +34,28 @@ class ServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.CreateOrUpdateGuildProgress = channel.unary_unary(
-                '/service.Service/CreateOrUpdateGuildProgress',
-                request_serializer=service__pb2.CreateOrUpdateGuildProgressRequest.SerializeToString,
-                response_deserializer=service__pb2.CreateOrUpdateGuildProgressResponse.FromString,
+        self.Join = channel.unary_unary(
+                '/service.Service/Join',
+                request_serializer=service__pb2.JoinRequest.SerializeToString,
+                response_deserializer=service__pb2.JoinResponse.FromString,
                 _registered_method=True)
-        self.GetGuildProgress = channel.unary_unary(
-                '/service.Service/GetGuildProgress',
-                request_serializer=service__pb2.GetGuildProgressRequest.SerializeToString,
-                response_deserializer=service__pb2.GetGuildProgressResponse.FromString,
+        self.Check = channel.unary_unary(
+                '/service.Service/Check',
+                request_serializer=service__pb2.CheckRequest.SerializeToString,
+                response_deserializer=service__pb2.CheckResponse.FromString,
                 _registered_method=True)
 
 
 class ServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def CreateOrUpdateGuildProgress(self, request, context):
+    def Join(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def GetGuildProgress(self, request, context):
+    def Check(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -64,15 +64,15 @@ class ServiceServicer(object):
 
 def add_ServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'CreateOrUpdateGuildProgress': grpc.unary_unary_rpc_method_handler(
-                    servicer.CreateOrUpdateGuildProgress,
-                    request_deserializer=service__pb2.CreateOrUpdateGuildProgressRequest.FromString,
-                    response_serializer=service__pb2.CreateOrUpdateGuildProgressResponse.SerializeToString,
+            'Join': grpc.unary_unary_rpc_method_handler(
+                    servicer.Join,
+                    request_deserializer=service__pb2.JoinRequest.FromString,
+                    response_serializer=service__pb2.JoinResponse.SerializeToString,
             ),
-            'GetGuildProgress': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetGuildProgress,
-                    request_deserializer=service__pb2.GetGuildProgressRequest.FromString,
-                    response_serializer=service__pb2.GetGuildProgressResponse.SerializeToString,
+            'Check': grpc.unary_unary_rpc_method_handler(
+                    servicer.Check,
+                    request_deserializer=service__pb2.CheckRequest.FromString,
+                    response_serializer=service__pb2.CheckResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -86,7 +86,7 @@ class Service(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def CreateOrUpdateGuildProgress(request,
+    def Join(request,
             target,
             options=(),
             channel_credentials=None,
@@ -99,9 +99,9 @@ class Service(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/service.Service/CreateOrUpdateGuildProgress',
-            service__pb2.CreateOrUpdateGuildProgressRequest.SerializeToString,
-            service__pb2.CreateOrUpdateGuildProgressResponse.FromString,
+            '/service.Service/Join',
+            service__pb2.JoinRequest.SerializeToString,
+            service__pb2.JoinResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -113,7 +113,7 @@ class Service(object):
             _registered_method=True)
 
     @staticmethod
-    def GetGuildProgress(request,
+    def Check(request,
             target,
             options=(),
             channel_credentials=None,
@@ -126,9 +126,9 @@ class Service(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/service.Service/GetGuildProgress',
-            service__pb2.GetGuildProgressRequest.SerializeToString,
-            service__pb2.GetGuildProgressResponse.FromString,
+            '/service.Service/Check',
+            service__pb2.CheckRequest.SerializeToString,
+            service__pb2.CheckResponse.FromString,
             options,
             channel_credentials,
             insecure,

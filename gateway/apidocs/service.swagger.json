@@ -17,16 +17,59 @@
     "application/json"
   ],
   "paths": {
-    "/v1/admin/namespace/{namespace}/progress": {
-      "post": {
-        "summary": "Update Guild progression",
-        "description": "Update Guild progression if not existed yet will create a new one",
-        "operationId": "Service_CreateOrUpdateGuildProgress",
+    "/v1/admin/namespace/{namespace}/check/{playerId}": {
+      "get": {
+        "summary": "Check",
+        "description": "Check",
+        "operationId": "Service_Check",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/serviceCreateOrUpdateGuildProgressResponse"
+              "$ref": "#/definitions/serviceCheckResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "playerId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Service"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/admin/namespace/{namespace}/join": {
+      "post": {
+        "summary": "Join",
+        "description": "Join",
+        "operationId": "Service_Join",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/serviceJoinResponse"
             }
           },
           "default": {
@@ -48,51 +91,8 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ServiceCreateOrUpdateGuildProgressBody"
+              "$ref": "#/definitions/ServiceJoinBody"
             }
-          }
-        ],
-        "tags": [
-          "Service"
-        ],
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/v1/admin/namespace/{namespace}/progress/{guildId}": {
-      "get": {
-        "summary": "Get guild progression",
-        "description": "Get guild progression",
-        "operationId": "Service_GetGuildProgress",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/serviceGetGuildProgressResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "namespace",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "guildId",
-            "in": "path",
-            "required": true,
-            "type": "string"
           }
         ],
         "tags": [
@@ -107,11 +107,11 @@
     }
   },
   "definitions": {
-    "ServiceCreateOrUpdateGuildProgressBody": {
+    "ServiceJoinBody": {
       "type": "object",
       "properties": {
-        "guildProgress": {
-          "$ref": "#/definitions/serviceGuildProgress"
+        "playerId": {
+          "type": "string"
         }
       }
     },
@@ -143,39 +143,16 @@
         }
       }
     },
-    "serviceCreateOrUpdateGuildProgressResponse": {
+    "serviceCheckResponse": {
       "type": "object",
       "properties": {
-        "guildProgress": {
-          "$ref": "#/definitions/serviceGuildProgress"
+        "status": {
+          "type": "string"
         }
       }
     },
-    "serviceGetGuildProgressResponse": {
-      "type": "object",
-      "properties": {
-        "guildProgress": {
-          "$ref": "#/definitions/serviceGuildProgress"
-        }
-      }
-    },
-    "serviceGuildProgress": {
-      "type": "object",
-      "properties": {
-        "guildId": {
-          "type": "string"
-        },
-        "namespace": {
-          "type": "string"
-        },
-        "objectives": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      }
+    "serviceJoinResponse": {
+      "type": "object"
     }
   },
   "securityDefinitions": {
