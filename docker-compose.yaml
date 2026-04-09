@@ -12,6 +12,8 @@ services:
       - AB_NAMESPACE=${AB_NAMESPACE}
       - PLUGIN_GRPC_SERVER_AUTH_ENABLED
       - BASE_PATH
+      - ASYNC_MESSAGING_PUBLISHER_ENABLED
+      - ASYNC_MESSAGING_PUBLISHER_GRPC_PORT
       - LOKI_URL=http://host.docker.internal:3100/loki/api/v1/push
       - OTEL_EXPORTER_ZIPKIN_ENDPOINT=http://host.docker.internal:9411/api/v2/spans
     extra_hosts:
