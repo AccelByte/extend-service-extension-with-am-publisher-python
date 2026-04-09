@@ -8,6 +8,8 @@ import logging
 from logging import Logger
 from typing import List, Optional
 
+import grpc.aio
+
 from environs import Env
 
 from accelbyte_py_sdk import get_version
@@ -28,6 +30,7 @@ from accelbyte_grpc_plugin.app import (
 from accelbyte_grpc_plugin.utils import instrument_sdk_http_client
 
 from service_pb2_grpc import add_ServiceServicer_to_server
+from async_messaging.publisher_service_pb2_grpc import AsyncMessagingPublisherServiceStub
 from .services.my_service import AsyncService
 from .utils import create_env
 
@@ -46,6 +49,10 @@ DEFAULT_PLUGIN_GRPC_SERVER_AUTH_ENABLED: bool = True
 
 DEFAULT_PLUGIN_GRPC_SERVER_LOGGING_ENABLED: bool = False
 DEFAULT_PLUGIN_GRPC_SERVER_METRICS_ENABLED: bool = True
+
+DEFAULT_ASYNC_MESSAGING_PUBLISHER_GRPC_HOST: str = "localhost"
+DEFAULT_ASYNC_MESSAGING_PUBLISHER_GRPC_PORT: int = 7474
+DEFAULT_ASYNC_MESSAGING_PUBLISHER_ENABLED: bool = True
 
 
 async def main(**kwargs) -> None:
@@ -79,11 +86,28 @@ async def main(**kwargs) -> None:
 
     sdk.timer = auth_service.LoginClientTimer(5, refresh_rate=0.8, repeats=-1, autostart=True, sdk=sdk)
 
-    options = create_options(sdk=sdk, env=env, logger=logger)
+    with env.prefixed("AB_"):
+        namespace = env.str("NAMESPACE", DEFAULT_AB_NAMESPACE)
+
+    with env.prefixed("ASYNC_MESSAGING_PUBLISHER_"):
+        publisher_host = env.str("GRPC_HOST", DEFAULT_ASYNC_MESSAGING_PUBLISHER_GRPC_HOST)
+        publisher_port = env.int("GRPC_PORT", DEFAULT_ASYNC_MESSAGING_PUBLISHER_GRPC_PORT)
+        publish_enabled = env.bool("ENABLED", DEFAULT_ASYNC_MESSAGING_PUBLISHER_ENABLED)
+
+    publisher_channel = grpc.aio.insecure_channel(f"{publisher_host}:{publisher_port}")
+    publisher_stub = AsyncMessagingPublisherServiceStub(publisher_channel)
+
+    options = create_options(sdk=sdk, env=env, logger=logger, namespace=namespace)
     options.append(
         AppOptionGRPCService(
             full_name=AsyncService.full_name,
-            service=AsyncService(sdk=sdk, logger=logger),
+            service=AsyncService(
+                sdk=sdk,
+                logger=logger,
+                publisher_stub=publisher_stub,
+                publish_enabled=publish_enabled,
+                namespace=namespace,
+            ),
             add_service_fn=add_ServiceServicer_to_server,
         )
     )
@@ -95,11 +119,8 @@ async def main(**kwargs) -> None:
     await app.run()
 
 
-def create_options(sdk: AccelByteSDK, env: Env, logger: Logger) -> List[AppOption]:
+def create_options(sdk: AccelByteSDK, env: Env, logger: Logger, namespace: str = DEFAULT_AB_NAMESPACE) -> List[AppOption]:
     options: List[AppOption] = []
-
-    with env.prefixed("AB_"):
-        namespace = env.str("NAMESPACE", DEFAULT_AB_NAMESPACE)
 
     with env.prefixed("ENABLE_"):
         if env.bool("HEALTH_CHECK", DEFAULT_ENABLE_HEALTH_CHECK):
