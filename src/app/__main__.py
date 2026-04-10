@@ -95,7 +95,7 @@ async def main(**kwargs) -> None:
         publish_enabled = env.bool("ENABLED", DEFAULT_ASYNC_MESSAGING_PUBLISHER_ENABLED)
 
     publisher_channel = grpc.aio.insecure_channel(f"{publisher_host}:{publisher_port}")
-    publisher_stub = AsyncMessagingPublisherServiceStub(publisher_channel)
+    publisher_client = AsyncMessagingPublisherServiceStub(publisher_channel)
 
     options = create_options(sdk=sdk, env=env, logger=logger, namespace=namespace)
     options.append(
@@ -104,7 +104,7 @@ async def main(**kwargs) -> None:
             service=AsyncService(
                 sdk=sdk,
                 logger=logger,
-                publisher_stub=publisher_stub,
+                publisher_client=publisher_client,
                 publish_enabled=publish_enabled,
             ),
             add_service_fn=add_ServiceServicer_to_server,

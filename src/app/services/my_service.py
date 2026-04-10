@@ -34,12 +34,12 @@ class AsyncService(ServiceServicer):
         self,
         sdk: AccelByteSDK,
         logger: Logger,
-        publisher_stub: AsyncMessagingPublisherServiceStub,
+        publisher_client: AsyncMessagingPublisherServiceStub,
         publish_enabled: bool,
     ) -> None:
         self.sdk = sdk
         self.logger = logger
-        self.publisher_stub = publisher_stub
+        self.publisher_client = publisher_client
         self.publish_enabled = publish_enabled
 
     async def Join(self, request: JoinRequest, context: Any) -> JoinResponse:
@@ -57,7 +57,7 @@ class AsyncService(ServiceServicer):
         if not self.publish_enabled:
             self.logger.info(f"Publishing disabled - message would be published: {msg}")
         else:
-            await self.publisher_stub.PublishMessage(msg)
+            await self.publisher_client.PublishMessage(msg)
         return JoinResponse()
 
     async def Check(self, request: CheckRequest, context: Any) -> CheckResponse:
