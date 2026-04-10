@@ -215,7 +215,7 @@ var File_service_proto protoreflect.FileDescriptor
 
 const file_service_proto_rawDesc = "" +
 	"\n" +
-	"\rservice.proto\x12\aservice\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto\x1a\x10permission.proto\"H\n" +
+	"\rservice.proto\x12\aservice\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto\"H\n" +
 	"\vJoinRequest\x12\x1c\n" +
 	"\tnamespace\x18\x01 \x01(\tR\tnamespace\x12\x1b\n" +
 	"\tplayer_id\x18\x02 \x01(\tR\bplayerId\"\x0e\n" +
@@ -275,7 +275,6 @@ func file_service_proto_init() {
 	if File_service_proto != nil {
 		return
 	}
-	file_permission_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

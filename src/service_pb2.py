@@ -24,10 +24,9 @@ _sym_db = _symbol_database.Default()
 
 from google.api import annotations_pb2 as google_dot_api_dot_annotations__pb2
 from protoc_gen_openapiv2.options import annotations_pb2 as protoc__gen__openapiv2_dot_options_dot_annotations__pb2
-import permission_pb2 as permission__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rservice.proto\x12\x07service\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto\x1a\x10permission.proto\"3\n\x0bJoinRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x11\n\tplayer_id\x18\x02 \x01(\t\"\x0e\n\x0cJoinResponse\"4\n\x0c\x43heckRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x11\n\tplayer_id\x18\x02 \x01(\t\"\x1f\n\rCheckResponse\x12\x0e\n\x06status\x18\x01 \x01(\t2\xa0\x02\n\x07Service\x12\x81\x01\n\x04Join\x12\x14.service.JoinRequest\x1a\x15.service.JoinResponse\"L\x92\x41\x1a\x12\x04Join\x1a\x04Joinb\x0c\n\n\n\x06\x42\x65\x61rer\x12\x00\x82\xd3\xe4\x93\x02)\"$/v1/admin/namespace/{namespace}/join:\x01*\x12\x90\x01\n\x05\x43heck\x12\x15.service.CheckRequest\x1a\x16.service.CheckResponse\"X\x92\x41\x1c\x12\x05\x43heck\x1a\x05\x43heckb\x0c\n\n\n\x06\x42\x65\x61rer\x12\x00\x82\xd3\xe4\x93\x02\x33\x12\x31/v1/admin/namespace/{namespace}/check/{player_id}B\xb6\x01\n%net.accelbyte.extend.serviceextensionP\x01Z%accelbyte.net/extend/serviceextension\xaa\x02!AccelByte.Extend.ServiceExtension\x92\x41?\x12\x12\n\x0bService API2\x03\x31.0\"\x08/serviceZ\x1f\n\x1d\n\x06\x42\x65\x61rer\x12\x13\x08\x02\x1a\rAuthorization \x02\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rservice.proto\x12\x07service\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto\"3\n\x0bJoinRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x11\n\tplayer_id\x18\x02 \x01(\t\"\x0e\n\x0cJoinResponse\"4\n\x0c\x43heckRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x11\n\tplayer_id\x18\x02 \x01(\t\"\x1f\n\rCheckResponse\x12\x0e\n\x06status\x18\x01 \x01(\t2\xa0\x02\n\x07Service\x12\x81\x01\n\x04Join\x12\x14.service.JoinRequest\x1a\x15.service.JoinResponse\"L\x92\x41\x1a\x12\x04Join\x1a\x04Joinb\x0c\n\n\n\x06\x42\x65\x61rer\x12\x00\x82\xd3\xe4\x93\x02)\"$/v1/admin/namespace/{namespace}/join:\x01*\x12\x90\x01\n\x05\x43heck\x12\x15.service.CheckRequest\x1a\x16.service.CheckResponse\"X\x92\x41\x1c\x12\x05\x43heck\x1a\x05\x43heckb\x0c\n\n\n\x06\x42\x65\x61rer\x12\x00\x82\xd3\xe4\x93\x02\x33\x12\x31/v1/admin/namespace/{namespace}/check/{player_id}B\xb6\x01\n%net.accelbyte.extend.serviceextensionP\x01Z%accelbyte.net/extend/serviceextension\xaa\x02!AccelByte.Extend.ServiceExtension\x92\x41?\x12\x12\n\x0bService API2\x03\x31.0\"\x08/serviceZ\x1f\n\x1d\n\x06\x42\x65\x61rer\x12\x13\x08\x02\x1a\rAuthorization \x02\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -39,14 +38,14 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_SERVICE'].methods_by_name['Join']._serialized_options = b'\222A\032\022\004Join\032\004Joinb\014\n\n\n\006Bearer\022\000\202\323\344\223\002)\"$/v1/admin/namespace/{namespace}/join:\001*'
   _globals['_SERVICE'].methods_by_name['Check']._loaded_options = None
   _globals['_SERVICE'].methods_by_name['Check']._serialized_options = b'\222A\034\022\005Check\032\005Checkb\014\n\n\n\006Bearer\022\000\202\323\344\223\0023\0221/v1/admin/namespace/{namespace}/check/{player_id}'
-  _globals['_JOINREQUEST']._serialized_start=122
-  _globals['_JOINREQUEST']._serialized_end=173
-  _globals['_JOINRESPONSE']._serialized_start=175
-  _globals['_JOINRESPONSE']._serialized_end=189
-  _globals['_CHECKREQUEST']._serialized_start=191
-  _globals['_CHECKREQUEST']._serialized_end=243
-  _globals['_CHECKRESPONSE']._serialized_start=245
-  _globals['_CHECKRESPONSE']._serialized_end=276
-  _globals['_SERVICE']._serialized_start=279
-  _globals['_SERVICE']._serialized_end=567
+  _globals['_JOINREQUEST']._serialized_start=104
+  _globals['_JOINREQUEST']._serialized_end=155
+  _globals['_JOINRESPONSE']._serialized_start=157
+  _globals['_JOINRESPONSE']._serialized_end=171
+  _globals['_CHECKREQUEST']._serialized_start=173
+  _globals['_CHECKREQUEST']._serialized_end=225
+  _globals['_CHECKRESPONSE']._serialized_start=227
+  _globals['_CHECKRESPONSE']._serialized_end=258
+  _globals['_SERVICE']._serialized_start=261
+  _globals['_SERVICE']._serialized_end=549
 # @@protoc_insertion_point(module_scope)
