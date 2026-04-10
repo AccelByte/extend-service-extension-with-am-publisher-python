@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "03d4e82f-3150-4ed9-b036-874d1bd0844f",
-		"name": "Extend Service Extension Demo",
-		"description": "This `collection` requires an `environment` with the following variables.\n\n- `AB_BASE_URL`\n    \n- `AB_NAMESPACE`\n    \n- `AB_CLIENT_ID`\n    \n- `AB_CLIENT_SECRET`\n    \n- `EXTEND_APP_SERVICE_URL`\n    \n\nYou will need following permissions for the IAM Client.  \nFor AGS Private Cloud customers:\n\n- `ADMIN:ROLE [READ]`\n    \n- `ADMIN:NAMESPACE:{namespace}:NAMESPACE [READ]`\n    \n- `ADMIN:NAMESPACE:{namespace}:CLOUDSAVE:RECORD [CREATE,READ,UPDATE,DELETE]`\n    \n\nFor AGS Shared Cloud customers:\n\n- IAM > Roles (Read)\n    \n- Basic > Namespace (Read)\n    \n- Cloud Save > Game Records (Create, Read, Update, and Delete)  \n    \n\nMake sure you have deployed Extend Service Extension app. Get `EXTEND_APP_SERVICE_URL` from extend app page in admin portal. For local deployment, use local url instead.\n\nPlease read [getting started with Extend Service Extension](https://docs.accelbyte.io/gaming-services/services/extend/service-extension/getting-started-service-extension/) for more information.",
+		"_postman_id": "18893dd8-1c3b-47ba-afaa-ea552ec7cca4",
+		"name": "Extend Service Extension with Publisher Demo",
+		"description": "This `collection` requires an `environment` with the following variables.\n\n- `AB_BASE_URL`\n    \n- `AB_NAMESPACE`\n    \n- `AB_CLIENT_ID`\n    \n- `AB_CLIENT_SECRET`\n    \n- `EXTEND_APP_SERVICE_URL`\n    \n\nYou will need following permissions for the IAM Client.  \nFor AGS Private Cloud customers:\n\n- `ADMIN:ROLE [READ]`\n    \n- `ADMIN:NAMESPACE:{namespace}:NAMESPACE [READ]`\n    \n- `ADMIN:NAMESPACE:{namespace}:CLOUDSAVE:RECORD [CREATE,READ,UPDATE,DELETE]`\n    \n\nFor AGS Shared Cloud customers:\n\n- IAM > Roles (Read)\n    \n- Basic > Namespace (Read)\n    \n- Cloud Save > Game Records (Create, Read, Update, and Delete)\n    \n\n  \n  \nMake sure you have deployed Extend Service Extension app. Get `EXTEND_APP_SERVICE_URL` from extend app page in admin portal. For local deployment, use local url instead.\n\nPlease read [getting started with Extend Service Extension](https://docs.accelbyte.io/gaming-services/services/extend/service-extension/getting-started-service-extension/) for more information.\n\n  \nNote:\n\n`Check` endpoint will try to retrieve message data from Cloudsave. This need `Extend Event Handler with AM Consumer sample app` to works in tandem since the app will store received message to Cloudsave.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "16846723"
+		"_exporter_id": "19336018"
 	},
 	"item": [
 		{
@@ -72,7 +72,7 @@
 			"response": []
 		},
 		{
-			"name": "20-update-guild-progress",
+			"name": "20-player-join",
 			"event": [
 				{
 					"listen": "test",
@@ -83,7 +83,8 @@
 							"});"
 						],
 						"type": "text/javascript",
-						"packages": {}
+						"packages": {},
+						"requests": {}
 					}
 				},
 				{
@@ -93,7 +94,8 @@
 							""
 						],
 						"type": "text/javascript",
-						"packages": {}
+						"packages": {},
+						"requests": {}
 					}
 				}
 			],
@@ -112,7 +114,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"guildProgress\": {\r\n    \"guildId\": \"{{TEST_GUILD_ID}}\",\r\n    \"namespace\": \"{{AB_NAMESPACE}}\",\r\n    \"objectives\": {\r\n      \"additionalProp1\": 0,\r\n      \"additionalProp2\": 10,\r\n      \"additionalProp3\": 20\r\n    }\r\n  }\r\n}\r\n",
+					"raw": "{\r\n  \"playerId\": \"{{TEST_PLAYER_ID}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -120,7 +122,7 @@
 					}
 				},
 				"url": {
-					"raw": "{{EXTEND_APP_SERVICE_URL}}/v1/admin/namespace/{{AB_NAMESPACE}}/progress",
+					"raw": "{{EXTEND_APP_SERVICE_URL}}/v1/admin/namespace/{{AB_NAMESPACE}}/join",
 					"host": [
 						"{{EXTEND_APP_SERVICE_URL}}"
 					],
@@ -129,25 +131,32 @@
 						"admin",
 						"namespace",
 						"{{AB_NAMESPACE}}",
-						"progress"
+						"join"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "30-read-guild-progress",
+			"name": "30-check",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
+							"pm.test(\"Status code is 200\", function() {\r",
 							"    pm.response.to.have.status(200);\r",
-							"});"
+							"});\r",
+							"\r",
+							"pm.test(\"Status field is correct\", function() {\r",
+							"    var responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseJson.status).to.eq(\"joined\");\r",
+							"})"
 						],
 						"type": "text/javascript",
-						"packages": {}
+						"packages": {},
+						"requests": {}
 					}
 				},
 				{
@@ -157,10 +166,14 @@
 							""
 						],
 						"type": "text/javascript",
-						"packages": {}
+						"packages": {},
+						"requests": {}
 					}
 				}
 			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -174,8 +187,17 @@
 				},
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"playerId\": \"{{TEST_PLAYER_ID}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "{{EXTEND_APP_SERVICE_URL}}/v1/admin/namespace/{{AB_NAMESPACE}}/progress/{{TEST_GUILD_ID}}",
+					"raw": "{{EXTEND_APP_SERVICE_URL}}/v1/admin/namespace/{{AB_NAMESPACE}}/check/{{TEST_PLAYER_ID}}",
 					"host": [
 						"{{EXTEND_APP_SERVICE_URL}}"
 					],
@@ -184,8 +206,8 @@
 						"admin",
 						"namespace",
 						"{{AB_NAMESPACE}}",
-						"progress",
-						"{{TEST_GUILD_ID}}"
+						"check",
+						"{{TEST_PLAYER_ID}}"
 					]
 				}
 			},
@@ -198,6 +220,7 @@
 			"script": {
 				"type": "text/javascript",
 				"packages": {},
+				"requests": {},
 				"exec": [
 					""
 				]
@@ -208,6 +231,7 @@
 			"script": {
 				"type": "text/javascript",
 				"packages": {},
+				"requests": {},
 				"exec": [
 					""
 				]
@@ -220,9 +244,8 @@
 			"value": ""
 		},
 		{
-			"key": "TEST_GUILD_ID",
-			"value": "test-12345-test",
-			"type": "string"
+			"key": "TEST_PLAYER_ID",
+			"value": "test-12345-test"
 		}
 	]
 }

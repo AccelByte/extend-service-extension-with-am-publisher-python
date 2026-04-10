@@ -1,4 +1,4 @@
-# extend-service-extension-python
+# extend-service-extension-with-am-publisher-python
 
 ```mermaid
 flowchart LR
@@ -7,52 +7,57 @@ flowchart LR
    GW["gRPC Gateway"]
    SV["gRPC Server"]
    end
+   AMP["AM Publisher Service\n(port 7474)"]
    CL --- GW
    GW --- SV
+   SV --- AMP
 ```
 
-`AccelByte Gaming Services` (AGS) capabilities can be enhanced using 
-`Extend Service Extension` apps. An `Extend Service Extension` app is a RESTful 
-web service created using a stack that includes a `gRPC Server` and the 
+`AccelByte Gaming Services` (AGS) capabilities can be enhanced using
+`Extend Service Extension` apps. An `Extend Service Extension` app is a RESTful
+web service created using a stack that includes a `gRPC Server` and the
 [gRPC Gateway](https://github.com/grpc-ecosystem/grpc-gateway?tab=readme-ov-file#about).
 
 ## Overview
 
-This repository provides a project template for an `Extend Service Extension` 
-app written in `Python`. It includes an example of a custom guild service which has 
-two endpoints to create and get guild progress data. Additionally, it comes 
-with built-in instrumentation for observability, ensuring that metrics, traces, 
-and logs are available upon deployment.
+This repository provides a sample `Extend Service Extension` app written in `Python`
+that demonstrates integration with the AM (Async Messaging) Publisher service. It
+exposes two endpoints:
 
-You can clone this repository to begin developing your own 
-`Extend Service Extension` app. Simply modify this project by defining your 
-endpoints in `service.proto` file and implementing the handlers for those 
-endpoints.
+- **Join** (`POST /v1/admin/namespace/{namespace}/join`) — records a player join event
+  by publishing a `PlayerJoined` message to the AM Publisher service.
+- **Check** (`GET /v1/admin/namespace/{namespace}/check/{player_id}`) — checks whether
+  a player has joined by querying CloudSave for the stored event record.
+
+The app connects to an AM Publisher sidecar running on port `7474` (configurable via
+environment variables) and uses CloudSave as the data store for event records.
+
+Additionally, it comes with built-in instrumentation for observability, ensuring that
+metrics, traces, and logs are available upon deployment.
 
 ## Project Structure
-
-Customizing your Extend Service Extension app involves modifying the`service.proto` and `my_service.py` files. The app initializes key components, such as the gRPC server, in `__main__.py`. When a request is made to the RESTful endpoint, the gRPC gateway handles it and forwards it to the corresponding gRPC method. Before `my_service.py` executes any custom logic based on the request, the `authorization.py` first verifies that the request has the necessary access token and authorization. No other files need to be modified unless you require further customization.
 
 ```shell
 .
 ├── proto
-│   ├── app
-│   │   ├── service.proto    # gRPC server protobuf with additional options for exposing as RESTful web service
-│   │   └── ...
-│   ├── ...
+│   ├── async_messaging
+│   │   └── publisher_service.proto    # AM Publisher gRPC client proto
+│   ├── service.proto                  # gRPC server protobuf (Join + Check endpoints)
+│   └── ...
 ├── src
-│   ├── accelbyte_grpc_plugin
-│   │   ├── interceptors
-│   │   │   ├── authorization.py    # gRPC server interceptor for access token authentication and authorization
-│   │   │   └── ...
-│   │   └── ...
-│   ├── app
-│   │   ├── __main__.py   # App starts here
-│   │   ├── services
-│   │   │   ├── my_service.py   # gRPC server implementation containing the custom logic
-│   │   │   └── ...
-│   │   └── ...
-│   └── ...
+│   ├── accelbyte_grpc_plugin
+│   │   ├── interceptors
+│   │   │   ├── authorization.py    # gRPC server interceptor for access token validation
+│   │   │   └── ...
+│   │   └── ...
+│   ├── async_messaging               # Generated AM Publisher gRPC stubs
+│   ├── app
+│   │   ├── __main__.py   # App starts here; sets up AM Publisher gRPC client
+│   │   ├── services
+│   │   │   ├── my_service.py   # Join and Check endpoint implementations
+│   │   │   └── ...
+│   │   └── ...
+│   └── ...
 └── ...
 ```
 
@@ -103,7 +108,7 @@ Customizing your Extend Service Extension app involves modifying the`service.pro
          ```
 
    c. Docker (Docker Desktop 4.30+/Docker Engine v23.0+)
-   
+
       - On Linux Ubuntu:
 
          1. To install from the Ubuntu repository, run `sudo apt update && sudo apt install docker.io docker-buildx docker-compose-v2`.
@@ -171,18 +176,22 @@ Customizing your Extend Service Extension app involves modifying the`service.pro
          - Basic -> Namespace (Read)
          - Cloud Save -> Game Records (Create, Read, Update, Delete)
 
+3. AM Publisher service running on port `7474`. This is provided as a sidecar alongside
+   this app. Set `ASYNC_MESSAGING_PUBLISHER_ENABLED=false` to disable publishing and log
+   messages instead (useful for local development without the sidecar).
+
 ## Setup
 
 To be able to run this app, you will need to follow these setup steps.
 
-1. Create a docker compose `.env` file by copying the content of 
+1. Create a docker compose `.env` file by copying the content of
    [.env.template](.env.template) file.
 
-   > :warning: **The host OS environment variables have higher precedence 
-   compared to `.env` file variables**: If the variables in `.env` file do not 
-   seem to take effect properly, check if there are host OS environment 
-   variables with the same name. See documentation about 
-   [docker compose environment variables precedence](https://docs.docker.com/compose/how-tos/environment-variables/envvars-precedence/) 
+   > :warning: **The host OS environment variables have higher precedence
+   compared to `.env` file variables**: If the variables in `.env` file do not
+   seem to take effect properly, check if there are host OS environment
+   variables with the same name. See documentation about
+   [docker compose environment variables precedence](https://docs.docker.com/compose/how-tos/environment-variables/envvars-precedence/)
    for more details.
 
 2. Fill in the required environment variables in `.env` file as shown below.
@@ -192,12 +201,15 @@ To be able to run this app, you will need to follow these setup steps.
    AB_CLIENT_ID='xxxxxxxxxx'                 # Client ID from the Prerequisites section
    AB_CLIENT_SECRET='xxxxxxxxxx'             # Client Secret from the Prerequisites section
    AB_NAMESPACE='xxxxxxxxxx'                 # Namespace ID from the Prerequisites section
-   PLUGIN_GRPC_SERVER_AUTH_ENABLED=true      # Enable or disable access token and permission validation
+   PLUGIN_GRPC_SERVER_AUTH_ENABLED=true      # Enable or disable access token validation
    BASE_PATH='/guild'                        # The base path used for the app
+   ASYNC_MESSAGING_PUBLISHER_ENABLED=true    # Set to false to disable AM publishing (logs instead)
+   ASYNC_MESSAGING_PUBLISHER_GRPC_HOST=localhost  # AM Publisher sidecar host
+   ASYNC_MESSAGING_PUBLISHER_GRPC_PORT=7474       # AM Publisher sidecar port
    ```
- 
-   > :exclamation: **In this app, PLUGIN_GRPC_SERVER_AUTH_ENABLED is `true` by default**: If it is set to `false`, the endpoint `permission.action` and `permission.resource`  validation will be disabled and the endpoint can be accessed without a valid access token. This option is provided for development purpose only.
-   
+
+   > :exclamation: **In this app, PLUGIN_GRPC_SERVER_AUTH_ENABLED is `true` by default**: If it is set to `false`, the endpoint access token validation will be disabled and the endpoint can be accessed without a valid access token. This option is provided for development purpose only.
+
 ## Building
 
 To build this app, use the following command.
@@ -226,11 +238,11 @@ This app can be tested locally through the Swagger UI.
    docker compose up --build
    ```
 
-2. If **PLUGIN_GRPC_SERVER_AUTH_ENABLED** is `true`: Get an access token to 
-   be able to access the REST API service. 
-   
+2. If **PLUGIN_GRPC_SERVER_AUTH_ENABLED** is `true`: Get an access token to
+   be able to access the REST API service.
+
    To get an access token, you can use [get-access-token.postman_collection.json](demo/get-access-token.postman_collection.json) in demo folder.
-   Import the Postman collection to your Postman workspace and create a 
+   Import the Postman collection to your Postman workspace and create a
    Postman environment containing the following variables.
 
    - `AB_BASE_URL` For example, https://test.accelbyte.io
@@ -241,28 +253,32 @@ This app can be tested locally through the Swagger UI.
 
    Inside the postman collection, use `get-client-access-token` request to get client token or use `get-user-access-token` request to get user access token.
 
-   > :info: When using client access token, make sure the IAM client has following permission: 
-   `ADMIN:NAMESPACE:{namespace}:CLOUDSAVE:RECORD [CREATE,READ,UPDATE,DELETE]`.
-   
-   > :info: When using user access token, make sure the user has a role which contains following permission:
-   `ADMIN:NAMESPACE:{namespace}:CLOUDSAVE:RECORD [CREATE,READ,UPDATE,DELETE]`.
-
-3. The REST API service can then be tested by opening Swagger UI at 
-   `http://localhost:8000/guild/apidocs/`. Use this to create an API request 
+3. The REST API service can then be tested by opening Swagger UI at
+   `http://localhost:8000/guild/apidocs/`. Use this to create an API request
    to try the endpoints.
-   
-   > :info: Depending on the envar you set for `BASE_PATH`, the service will 
-   have different service URL. This how it's the formatted 
-   `http://localhost:8000/<base_path>`
 
-   ![swagger-interface](./docs/images/swagger-interface.png)
+   > :info: Depending on the envar you set for `BASE_PATH`, the service will
+   have different service URL. This how it's the formatted
+   `http://localhost:8000/<base_path>`
 
    To authorize Swagger UI, click on "Authorize" button on right side.
 
-   ![swagger-interface](./docs/images/swagger-authorize.png)
-
-   Popup will show, input "Bearer <user access token>" in `Value` field for 
+   Popup will show, input "Bearer <user access token>" in `Value` field for
    `Bearer (apiKey)`. Then click "Authorize" to save the user's access token.
+
+4. You can also use the Postman collection [demo/service-extension-with-publisher-demo.postman_collection.json](demo/service-extension-with-publisher-demo.postman_collection.json)
+   to test the `Join` and `Check` endpoints.
+
+   - Import the collection and configure the following variables in your Postman environment:
+     - `AB_BASE_URL`
+     - `AB_NAMESPACE`
+     - `AB_CLIENT_ID`
+     - `AB_CLIENT_SECRET`
+     - `EXTEND_APP_SERVICE_URL` (e.g. `http://localhost:8000/guild`)
+
+   - Run `10-client-login` first to obtain an access token.
+   - Run `20-player-join` to trigger a join event.
+   - Run `30-check` to verify the player has joined (requires the AM Consumer app to have stored the event in CloudSave).
 
 ### Test Observability
 
@@ -281,12 +297,12 @@ To be able to see the how the observability works in this sample app locally, th
    ```
 
    > :warning: **Make sure to install docker loki plugin beforehand**: Otherwise,
-   this app will not be able to run. This is required so that container 
-   logs can flow to the `loki` service within `grpc-plugin-dependencies` stack. 
-   Use this command to install docker loki plugin: 
+   this app will not be able to run. This is required so that container
+   logs can flow to the `loki` service within `grpc-plugin-dependencies` stack.
+   Use this command to install docker loki plugin:
    `docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions`.
 
-2. Clone and run [grpc-plugin-dependencies](https://github.com/AccelByte/grpc-plugin-dependencies) stack alongside this app. After this, Grafana 
+2. Clone and run [grpc-plugin-dependencies](https://github.com/AccelByte/grpc-plugin-dependencies) stack alongside this app. After this, Grafana
 will be accessible at http://localhost:3000.
 
    ```
@@ -327,12 +343,8 @@ After completing testing, the next step is to deploy your app to `AccelByte Gami
    > :warning: Run this command from your project directory. If you are in a different directory, add the `--work-dir <project-dir>` option to specify the correct path.
 
 3. **Deploy the Image**
-   
+
    On the **App Detail** page:
    - Click **Image Version History**
    - Select the image you just pushed
    - Click **Deploy Image**
-
-## Next Step
-
-Proceed by modifying this `Extend Service Extension` app template to implement your own custom logic. For more details, see [here](https://docs.accelbyte.io/gaming-services/modules/foundations/extend/service-extension/customize-service-extension-app/).
