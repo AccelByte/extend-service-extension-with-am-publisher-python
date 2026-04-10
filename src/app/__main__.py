@@ -106,7 +106,6 @@ async def main(**kwargs) -> None:
                 logger=logger,
                 publisher_stub=publisher_stub,
                 publish_enabled=publish_enabled,
-                namespace=namespace,
             ),
             add_service_fn=add_ServiceServicer_to_server,
         )

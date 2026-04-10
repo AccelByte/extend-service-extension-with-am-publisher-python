@@ -36,13 +36,11 @@ class AsyncService(ServiceServicer):
         logger: Logger,
         publisher_stub: AsyncMessagingPublisherServiceStub,
         publish_enabled: bool,
-        namespace: str,
     ) -> None:
         self.sdk = sdk
         self.logger = logger
         self.publisher_stub = publisher_stub
         self.publish_enabled = publish_enabled
-        self.namespace = namespace
 
     async def Join(self, request: JoinRequest, context: Any) -> JoinResponse:
         topic = "PlayerJoined"
