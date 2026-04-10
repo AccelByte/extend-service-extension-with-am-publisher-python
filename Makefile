@@ -11,7 +11,10 @@ PROTOC_IMAGE := proto-builder
 IS_INSIDE_DEVCONTAINER := $(REMOTE_CONTAINERS)
 BUILD_CACHE_VOLUME := $(shell echo '$(PROJECT_NAME)' | sed 's/[^a-zA-Z0-9_-]//g')-build-cache
 
-.PHONY: build proto_image proto
+.PHONY: build proto_image proto test
+
+test:
+	pytest
 
 build: build_server build_gateway
 

@@ -57,7 +57,10 @@ class AsyncService(ServiceServicer):
         if not self.publish_enabled:
             self.logger.info(f"Publishing disabled - message would be published: {msg}")
         else:
-            await self.publisher_client.PublishMessage(msg)
+            try:
+                await self.publisher_client.PublishMessage(msg)
+            except Exception as e:
+                await context.abort(StatusCode.INTERNAL, f"failed to publish message: {e}")
         return JoinResponse()
 
     async def Check(self, request: CheckRequest, context: Any) -> CheckResponse:
